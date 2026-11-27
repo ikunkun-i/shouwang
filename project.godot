@@ -10,12 +10,14 @@ config/name="守望"
 config/description="塔防 + 牌组构筑：沿航路建塔，关间用代币购买塔牌与技能牌。"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+run/main_scene="res://scenes/boot/main_menu.tscn"
 
 [autoload]
 
 GameState="*res://scripts/core/game_state.gd"
 SignalBus="*res://scripts/core/signal_bus.gd"
 Audio="*res://scripts/core/audio.gd"
+Flow="*res://scripts/flow.gd"
 
 [display]
 
