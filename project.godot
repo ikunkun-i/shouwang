@@ -1,0 +1,29 @@
+; Engine configuration file.
+; 项目《守望》—— 2026 开源游戏开发大赛参赛作品
+; 由团队手动维护，Godot 编辑器会自动补全其余字段。
+
+config_version=5
+
+[application]
+
+config/name="守望"
+config/description="塔防 + 牌组构筑：沿航路建塔，关间用代币购买塔牌与技能牌。"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+GameState="*res://scripts/core/game_state.gd"
+SignalBus="*res://scripts/core/signal_bus.gd"
+Audio="*res://scripts/core/audio.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
