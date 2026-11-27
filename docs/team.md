@@ -5,7 +5,7 @@
 | 昵称 | 域 | 分支 | 负责范围 | GitHub 账号 |
 | --- | --- | --- | --- | --- |
 | Siri | P1 战斗域 | `feat/p1-battle` | `scenes/battle/`、`scripts/{track,build_system,tower,enemy,wave_director,base}.gd`、`scripts/data/` | 待补 |
-| 星辰 | P2 经济域 | `feat/p2-economy` | `scripts/core/`（状态单例、事件总线、音频总线）、`scripts/economy/`、`scripts/cards/`、`data/`、商店界面 | 待补 |
+| 星辰 | P2 经济域 | `feat/p2-economy` | `scripts/core/`（状态单例、事件总线、音频总线）、`scripts/economy/`、`scripts/cards/`、`data/`、商店界面 | 1co1co1 |
 | 坤坤 | P3 流程与交付 | `feat/p3-flow` | `scenes/boot/`、`scenes/ui/`、`scripts/flow.gd`、`scripts/ui/`、打包交付、仓库维护 | ikunkun-i |
 
 ## 职责边界
