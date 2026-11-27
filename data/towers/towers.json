@@ -1,0 +1,63 @@
+{
+  "_schema": "towers/v1",
+  "_source": "docs/plan-v2.0-master.docx 表 3（2026-11-27 拍板：塔只有三种）",
+  "_units": "攻击范围为格数，1 格 = 30 单位；攻击间隔为秒；造价与攻击力为整数",
+  "_owner": "数值归 P2（星辰），本文件任何改动走 PR 并在群里说明",
+  "towers": [
+    {
+      "id": "A",
+      "name": "直线输出",
+      "attack": 100,
+      "hp": 1000,
+      "attack_interval": 1.0,
+      "cost": 100,
+      "range": {
+        "type": "ray",
+        "ray_width": 1,
+        "ray_length": -1,
+        "_note": "-1 表示沿朝向覆盖到地图边界，不设上限"
+      },
+      "targeting": "single",
+      "can_block": false,
+      "special": null
+    },
+    {
+      "id": "B",
+      "name": "阻挡",
+      "attack": 0,
+      "hp": 5000,
+      "attack_interval": 10.0,
+      "cost": 75,
+      "range": {
+        "type": "cell",
+        "ray_width": 0,
+        "ray_length": 0
+      },
+      "targeting": "none",
+      "can_block": true,
+      "special": null,
+      "_note": "攻击力 0，保留 10 秒间隔但不主动攻击；靠生命值承受并阻挡"
+    },
+    {
+      "id": "C",
+      "name": "范围输出",
+      "attack": 1,
+      "hp": 1250,
+      "attack_interval": 3.0,
+      "cost": 150,
+      "range": {
+        "type": "box",
+        "box_width": 3,
+        "box_height": 3,
+        "_note": "以自身所在格为中心的 3×3 共 9 格"
+      },
+      "targeting": "single",
+      "can_block": false,
+      "special": {
+        "type": "area_damage",
+        "damage": 350,
+        "_note": "只需锁定一个可索敌目标，命中时对范围内全部敌人结算 350；面板攻击力仍为 1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "_schema": "enemies/v1",
+  "_source": "docs/plan-v2.0-master.docx 表 4（2026-11-27 拍板：敌人只有三种）",
+  "_units": "攻击半径为格数，1 格 = 30 单位；移动速度为格/秒；判定框 25×25 单位",
+  "_owner": "数值归 P2（星辰），本文件任何改动走 PR 并在群里说明",
+  "enemies": [
+    {
+      "id": "A",
+      "name": "普通",
+      "attack": 100,
+      "hp": 700,
+      "attack_interval": 1.5,
+      "attack_radius": 1,
+      "move_speed": 1.0,
+      "reward_fee": 50,
+      "can_be_targeted": true,
+      "can_be_blocked": true,
+      "facing_block_immune": false,
+      "special": null
+    },
+    {
+      "id": "B",
+      "name": "远程",
+      "attack": 100,
+      "hp": 500,
+      "attack_interval": 2.0,
+      "attack_radius": 3,
+      "move_speed": 1.0,
+      "reward_fee": 50,
+      "can_be_targeted": true,
+      "can_be_blocked": true,
+      "facing_block_immune": false,
+      "special": null
+    },
+    {
+      "id": "C",
+      "name": "隐身",
+      "attack": 75,
+      "hp": 700,
+      "attack_interval": 1.5,
+      "attack_radius": 1,
+      "move_speed": 0.5,
+      "reward_fee": 50,
+      "can_be_targeted": false,
+      "can_be_blocked": false,
+      "facing_block_immune": true,
+      "special": {
+        "type": "stealth",
+        "_note": "不可被正常索敌，但可被范围伤害波及；不可被阻挡"
+      }
+    }
+  ]
+}

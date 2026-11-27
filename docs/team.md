@@ -4,8 +4,8 @@
 
 | 昵称 | 域 | 分支 | 负责范围 | GitHub 账号 |
 | --- | --- | --- | --- | --- |
-| Siri | P1 战斗域 | `feat/p1-battle` | `scenes/battle/`、`scripts/{track,build_system,tower,enemy,wave_director,base}.gd`、`scripts/data/` | 待补 |
-| 星辰 | P2 经济域 | `feat/p2-economy` | `scripts/core/`（状态单例、事件总线、音频总线）、`scripts/economy/`、`scripts/cards/`、`data/`、商店界面 | 待补 |
+| Siri | P1 战斗域 | `feat/p1-battle` | `scenes/battle/`、`scripts/{track,build_system,tower,enemy,wave_director,base}.gd`、`scripts/data/` | Siri-Tonstin（siritonstin@icloud.com） |
+| 星辰 | P2 经济域 | `feat/p2-economy` | `scripts/core/`（状态单例、事件总线、音频总线）、`scripts/economy/`、`scripts/cards/`、`data/`、商店界面 | 1co1co1 |
 | 坤坤 | P3 流程与交付 | `feat/p3-flow` | `scenes/boot/`、`scenes/ui/`、`scripts/flow.gd`、`scripts/ui/`、打包交付、仓库维护 | ikunkun-i |
 
 ## 职责边界
@@ -19,7 +19,7 @@
 
 | 角色 | 负责人 | 产出 |
 | --- | --- | --- |
-| 世界观 / 叙事主笔 | crescent-cat | `docs/worldbuilding-yongzhou.docx` 的定稿与包装文案 |
-| 主策划（玩法收口） | 待确认 | 玩法口径维护，冲突时以 `docs/plan-v1.0.pdf` 为准 |
+| 世界观 / 叙事主笔 | crescent-cat | 星际撤离线（宇宙海盗）的设定稿与包装文案；`docs/plan-v2.0-master.docx` 附录 B 为其原稿 |
+| 主策划（玩法收口） | 待确认 | 玩法口径维护，冲突时以 `docs/plan-v2.0-master.docx` 为准；`plan-v1.0.pdf` 已作废 |
 
 新增或调整分工，改本表并在群里同步，不要只口头说。

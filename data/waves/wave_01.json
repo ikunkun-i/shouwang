@@ -1,0 +1,34 @@
+{
+  "_schema": "wave/v1",
+  "_source": "docs/plan-v2.0-master.docx（波次结构，具体数量为占位，待 P1 试玩后调）",
+  "_units": "interval 与 start_delay 为秒；count 为单组数量",
+  "_owner": "结构由 P1（Siri）读，数值由 P2（星辰）填",
+  "level": 1,
+  "wave_index": 1,
+  "path_id": "path_1",
+  "_note": "path_id 对应 scenes/battle/track 里的一条航路；一关可有 1–3 条，字段由 P1 定名后此处同步",
+  "spawns": [
+    {
+      "enemy_id": "A",
+      "count": 6,
+      "interval": 1.0,
+      "start_delay": 0.0
+    },
+    {
+      "enemy_id": "B",
+      "count": 2,
+      "interval": 1.5,
+      "start_delay": 4.0
+    },
+    {
+      "enemy_id": "C",
+      "count": 1,
+      "interval": 1.0,
+      "start_delay": 8.0
+    }
+  ],
+  "_notes": [
+    "同一 wave 内多组 spawn 按 start_delay 先后出现，互不打断",
+    "波次总数由 index.json 汇总，界面显示“第 X 波 / 共 Y 波”时读它"
+  ]
+}
