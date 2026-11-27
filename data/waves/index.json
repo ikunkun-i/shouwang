@@ -1,0 +1,12 @@
+{
+  "_schema": "wave_index/v1",
+  "_note": "本关波次总数与顺序。界面显示“第 X 波 / 共 Y 波”时读这里的 total_waves，不要用数组长度硬算",
+  "level": 1,
+  "total_waves": 3,
+  "waves": [
+    "wave_01.json",
+    "wave_02.json",
+    "wave_03.json"
+  ],
+  "_todo": "wave_02/03 尚未创建，数量与难度曲线待 P1 首版可玩后调整"
+}
