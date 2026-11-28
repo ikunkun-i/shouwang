@@ -1,0 +1,88 @@
+{
+  "_schema": "shop/v1",
+  "_source": "docs/plan-v2.0-master.docx 第 2 章「两种资源与商店」+ docs/p2-scope.md 6.5",
+  "_status": "陈列规则与技能牌售价为策划案给定；价格与曲线为占位",
+  "_owner": "P2（星辰）",
+  "slots": {
+    "tower_cards": 3,
+    "skill_cards": 2,
+    "_note": "策划案给定：陈列 3 张塔牌和 2 张技能牌"
+  },
+  "offer_rules": {
+    "tower_cards": "all_available",
+    "_tower_cards_note": "三张塔牌全上架，但已解锁的塔型不再重复上架",
+    "skill_cards": "random_distinct",
+    "_skill_cards_note": "从 cards.json 的六张技能牌里随机取 2 张，不重复"
+  },
+  "reroll": {
+    "base_cost": 20,
+    "cost_step": 10,
+    "reset_per_station": true,
+    "max_rerolls": 0,
+    "_max_rerolls_note": "0 表示不限次数",
+    "_status": "占位：策划案只写「付费重置商店」，未给价格"
+  },
+  "sell_refund_ratio": 0.5,
+  "_sell_refund_note": "占位：出售卡牌返还售价的比例",
+  "price_inflation": {
+    "start_station": 1,
+    "step_per_station": 0.15,
+    "max_multiplier": 2.0,
+    "_note": "策划案给定「进入第二大关后商店价格略有上涨」；从 station_index >= start_station 起，每多一关乘 (1 + step_per_station)，上限 max_multiplier"
+  },
+  "upgrades": [
+    {
+      "id": "damage",
+      "name": "火力强化",
+      "tiers": [
+        {
+          "tier": 1,
+          "price": 60,
+          "effect": {
+            "type": "tower_attack_multiplier",
+            "value": 1.15
+          },
+          "desc": "全部塔攻击力 +15%"
+        },
+        {
+          "tier": 2,
+          "price": 130,
+          "effect": {
+            "type": "tower_attack_multiplier",
+            "value": 1.3
+          },
+          "desc": "全部塔攻击力 +30%（累计，非叠加）"
+        }
+      ]
+    },
+    {
+      "id": "income",
+      "name": "产能强化",
+      "tiers": [
+        {
+          "tier": 1,
+          "price": 50,
+          "effect": {
+            "type": "passive_income_multiplier",
+            "value": 1.2
+          },
+          "desc": "基地产费速度 +20%"
+        },
+        {
+          "tier": 2,
+          "price": 110,
+          "effect": {
+            "type": "passive_income_multiplier",
+            "value": 1.5
+          },
+          "desc": "基地产费速度 +50%（累计，非叠加）"
+        }
+      ]
+    }
+  ],
+  "_upgrades_status": "占位：策划案只写「提供两档升级服务（第二档更贵）」，未给增益内容与价格；两档是全局增益，作用于全部塔，不做逐塔升级",
+  "challenge": {
+    "view_only": true,
+    "note": "策划案只写「查看挑战」，未给玩法；先只保留入口与占位文案"
+  }
+}

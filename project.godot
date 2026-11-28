@@ -18,6 +18,10 @@ GameState="*res://scripts/core/game_state.gd"
 SignalBus="*res://scripts/core/signal_bus.gd"
 Audio="*res://scripts/core/audio.gd"
 Flow="*res://scripts/flow.gd"
+Cards="*res://scripts/cards/card_db.gd"
+Fee="*res://scripts/economy/fee_system.gd"
+Shop="*res://scripts/economy/shop.gd"
+Settlement="*res://scripts/economy/settlement.gd"
 
 [display]
 
