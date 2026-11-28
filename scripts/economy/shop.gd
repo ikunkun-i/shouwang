@@ -187,6 +187,99 @@ func get_challenge_info() -> Dictionary:
 
 
 # ============================================================
+# 给界面的展示数据（P3 直接渲染，不要自己解析 data/）
+# ============================================================
+
+## 陈列槽位的展示数据。affordable 已经把「买不买得起」算好，P3 据此置灰即可。
+## 每项：{kind, card_id, name, desc, price, sold, affordable, card}
+func get_offer_view_models() -> Array:
+	var views: Array = []
+	for offer in _offers:
+		var card_id := StringName(String(offer.get("card_id", "")))
+		var price := int(offer.get("price", 0))
+		var sold := bool(offer.get("sold", false))
+		views.append({
+			"kind": String(offer.get("kind", "")),
+			"card_id": card_id,
+			"name": String(offer.get("name", "")),
+			"desc": String(offer.get("desc", "")),
+			"price": price,
+			"sold": sold,
+			"affordable": (not sold) and GameState.tokens >= price,
+			"card": Cards.get_card_view(card_id),
+		})
+	return views
+
+
+## 两档升级服务的展示数据。每项给出「当前档」与「下一档」，买满时 next_tier 为 0。
+## 每项：{id, name, current_tier, max_tier, next_tier, next_price, next_desc, maxed, affordable}
+func get_upgrade_view_models() -> Array:
+	var views: Array = []
+	for entry in JsonConfig.get_array(_config, "upgrades"):
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var upgrade: Dictionary = entry
+		var upgrade_id := StringName(String(upgrade.get("id", "")))
+		var tiers: Array = upgrade.get("tiers", [])
+		var max_tier := tiers.size()
+		var current := GameState.get_upgrade_tier(upgrade_id)
+		var next_tier := current + 1
+		var next_price := 0
+		var next_desc := "已满级"
+		if next_tier <= max_tier:
+			var tier_data := _find_tier(upgrade, next_tier)
+			next_price = int(tier_data.get("price", 0))
+			next_desc = String(tier_data.get("desc", ""))
+		views.append({
+			"id": upgrade_id,
+			"name": String(upgrade.get("name", "")),
+			"current_tier": current,
+			"max_tier": max_tier,
+			"next_tier": next_tier if next_tier <= max_tier else 0,
+			"next_price": next_price,
+			"next_desc": next_desc,
+			"maxed": next_tier > max_tier,
+			"affordable": next_tier <= max_tier and GameState.tokens >= next_price,
+		})
+	return views
+
+
+## 当前可以出售的牌（技能牌）。塔牌卖了会把已解锁塔型收回，所以不在列表里。
+## 每项：{card_id, name, refund, card}
+func get_sellable_cards() -> Array:
+	var ratio := JsonConfig.get_float(_config, "sell_refund_ratio", 0.5)
+	var views: Array = []
+	for card_id in GameState.deck:
+		var card := Cards.get_card(card_id)
+		if card.is_empty():
+			continue
+		if String(card.get("kind", "")) == "tower":
+			continue
+		views.append({
+			"card_id": card_id,
+			"name": Cards.get_display_name(card_id),
+			"refund": int(round(float(Cards.get_price(card_id)) * ratio)),
+			"card": Cards.get_card_view(card_id),
+		})
+	return views
+
+
+## 商店面板一次刷新要的全部数据。P3 调这一个方法就够，不用分别取。
+func get_panel_state() -> Dictionary:
+	return {
+		"open": _is_open,
+		"station_index": GameState.station_index,
+		"tokens": GameState.tokens,
+		"offers": get_offer_view_models(),
+		"upgrades": get_upgrade_view_models(),
+		"sellable": get_sellable_cards(),
+		"reroll_cost": get_reroll_cost(),
+		"can_reroll": _is_open and GameState.tokens >= get_reroll_cost(),
+		"challenge": get_challenge_info(),
+	}
+
+
+# ============================================================
 # 内部
 # ============================================================
 

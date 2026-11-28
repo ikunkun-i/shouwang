@@ -156,6 +156,16 @@ Shop.sell_card(&"skill_repair")
 Shop.close_shop()                      # P2 收到后推进到下一关
 
 # 界面一律只读 GameState + 监听信号；价格用 Shop.get_price()，不要自己乘系数。
+
+# ── P3：直接渲染的数据（不要自己解析 data/ 里的 JSON）────────────────
+Cards.get_start_deck_options()   # 牌组选择界面：三套牌组 + 最后一项「跳过」
+Cards.get_hand_view()           # 手牌区：按牌组顺序，含 name / kind / desc / price / owned
+Shop.get_panel_state()          # 商店面板一次刷新全都要：# 一个方法返回下面五项
+                                #   offers    陈列（含 sold / affordable）
+                                #   upgrades  两档升级（含 current_tier / next_price / maxed）
+                                #   sellable  可卖的技能牌（含 refund）
+                                #   reroll_cost / can_reroll
+                                #   challenge 挑战入口的占位数据
 ```
 
 ## 5. `data/` 文件清单
@@ -231,11 +241,12 @@ P3 画面板时把空槽画成空位即可，不要补货。
 | `scripts/core/signal_bus.gd` | 27 条信号，冻结 v1 | 通过 |
 | `scripts/economy/fee_system.gd` | 扣费、击杀奖励、拆塔退款、基地定时产费、产能升级加成 | 通过 |
 | `scripts/economy/settlement.gd` | 开一局、进入本关、基地掉点、代币结算、推进关卡、重复结算防护 | 通过 |
-| `scripts/economy/shop.gd` | 陈列、买卖、重置、两档升级、涨价 | 通过 |
-| `scripts/cards/card_db.gd` | 牌库、起始牌组、技能牌合法性预检与请求 | 通过 |
+| `scripts/economy/shop.gd` | 陈列、买卖、重置、两档升级、涨价；另给 P3 的 `get_panel_state()` 一次性面板数据 | 通过 |
+| `scripts/cards/card_db.gd` | 牌库、起始牌组、技能牌合法性预检与请求；另给 P3 的 `get_start_deck_options()` / `get_hand_view()` / `get_card_view()` | 通过 |
 | `data/economy.json`、`data/cards/cards.json`、`data/shop/shop.json`、`data/start_decks/index.json` | 全部占位数值 | 通过 |
 
-回归方式：工程里有 20 组冒烟断言（扣费、退款、结算、重复结算、商店买卖、重置、升级、售卖、技能牌预检与退回、跳过牌组、推进关卡），
+回归方式：工程里有 24 组冒烟断言（扣费、退款、结算、重复结算、商店买卖、重置、两档升级、出售、
+技能牌预检与退回、跳过牌组、推进关卡、牌组选项、商店面板状态、升级满级、手牌视图），
 在 `feat/p2-economy` 分支上跑 `godot --headless --path . res://.tmp/smoke.tscn` 全绿。该测试脚本不入库。
 
 ## 7. 待定项（拍板前不许自己填死）

@@ -82,6 +82,90 @@ func get_display_name(card_id: StringName) -> String:
 	return display if not display.is_empty() else String(card_id)
 
 
+## 给界面直接渲染的卡牌数据。P3 的手牌区、商店槽位都读这个，不要自己去解析 cards.json。
+## 返回 {} 表示这张牌不存在（配置写错了），界面据此跳过而不是崩。
+func get_card_view(card_id: StringName) -> Dictionary:
+	var card := get_card(card_id)
+	if card.is_empty():
+		return {}
+	return {
+		"id": card_id,
+		"name": get_display_name(card_id),
+		"kind": String(card.get("kind", "")),
+		"desc": String(card.get("desc", "")),
+		"price": int(card.get("price", 0)),
+		"target": String(card.get("target", "")),
+		"requires_attack_min": int(card.get("requires_attack_min", 0)),
+		"duration": float(card.get("duration", 0.0)),
+		"owned": GameState.has_card(card_id),
+	}
+
+
+## 当前手牌区的展示数据，按牌组顺序返回，仓库里可以出现重复卡。
+func get_hand_view() -> Array:
+	var views: Array = []
+	for card_id in GameState.deck:
+		var view := get_card_view(card_id)
+		if not view.is_empty():
+			views.append(view)
+	return views
+
+
+## 起始牌组选择界面的选项。最后一项固定是「跳过」，P3 直接照数组顺序画即可。
+## 每项：{id, name, desc, cards, card_names, is_skip}
+func get_start_deck_options() -> Array:
+	var config := JsonConfig.load_dict(DECKS_PATH)
+	var options: Array = []
+
+	for entry in JsonConfig.get_array(config, "decks"):
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var deck: Dictionary = entry
+		var card_ids: Array = deck.get("cards", [])
+		options.append({
+			"id": StringName(String(deck.get("id", ""))),
+			"name": String(deck.get("name", "")),
+			"desc": String(deck.get("desc", "")),
+			"cards": card_ids.duplicate(),
+			"card_names": _names_of(card_ids),
+			"is_skip": false,
+		})
+
+	var skip := JsonConfig.get_dict(config, "skip_option")
+	if JsonConfig.get_bool(skip, "enabled", false):
+		var skip_cards: Array = skip.get("cards", [])
+		options.append({
+			"id": &"",
+			"name": "跳过",
+			"desc": "不选牌组，只带一种基础塔（%s）开局" % [", ".join(_names_of_ids(skip.get("unlocked_towers", [])))],
+			"cards": skip_cards.duplicate(),
+			"card_names": _names_of(skip_cards),
+			"is_skip": true,
+		})
+
+	return options
+
+
+func _names_of(card_ids: Array) -> Array:
+	var names: Array = []
+	for raw_id in card_ids:
+		names.append(get_display_name(StringName(String(raw_id))))
+	return names
+
+
+func _names_of_ids(tower_types: Array) -> Array:
+	var names: Array = []
+	var towers := JsonConfig.load_dict(TOWERS_PATH)
+	for raw_type in tower_types:
+		var display := "%s 塔" % String(raw_type)
+		for entry in JsonConfig.get_array(towers, "towers"):
+			if typeof(entry) == TYPE_DICTIONARY and String(entry.get("id", "")) == String(raw_type):
+				display = String(entry.get("name", display))
+				break
+		names.append(display)
+	return names
+
+
 # ============================================================
 # 起始牌组
 # ============================================================
