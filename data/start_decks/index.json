@@ -1,0 +1,52 @@
+{
+  "_schema": "start_decks/v1",
+  "_source": "docs/plan-v2.0-master.docx 第 1 章表 1（开始游戏：从塔组、技能组、混合组中选择起始牌组，也可跳过选择）",
+  "_status": "三套牌组的名字为策划案给定；具体卡表为占位推断",
+  "_owner": "P2（星辰）",
+  "_note": "牌组只决定开局持有哪几张牌；塔牌的持有等价于该塔型解锁（见 cards.json 的 tower_type）",
+  "skip_option": {
+    "enabled": true,
+    "unlocked_towers": [
+      "A"
+    ],
+    "cards": [],
+    "_note": "策划案给定：跳过时只给 1 种基础炮台（A）"
+  },
+  "decks": [
+    {
+      "id": "tower_focus",
+      "name": "塔组",
+      "desc": "三种塔全部解锁，不带技能牌",
+      "cards": [
+        "tower_A",
+        "tower_B",
+        "tower_C"
+      ]
+    },
+    {
+      "id": "skill_focus",
+      "name": "技能组",
+      "desc": "只有基础塔 A，四张塔技能牌各一张",
+      "cards": [
+        "tower_A",
+        "skill_attack_up",
+        "skill_range_up",
+        "skill_berserk",
+        "skill_repair"
+      ],
+      "_status": "占位推断：若技能组不带任何塔牌就无塔可建，因此保留基础塔 A；待主策划确认"
+    },
+    {
+      "id": "mixed",
+      "name": "混合组",
+      "desc": "A 与 C 两种塔，配两张技能牌",
+      "cards": [
+        "tower_A",
+        "tower_C",
+        "skill_repair",
+        "skill_freeze"
+      ],
+      "_status": "占位推断：待主策划确认"
+    }
+  ]
+}
