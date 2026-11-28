@@ -141,8 +141,25 @@ SignalBus.station_cleared.emit(GameState.station_index)
 SignalBus.station_failed.emit(GameState.station_index)
 
 # ── P1：施加技能牌效果 ──────────────────────────────────
-# 监听 tower_skill_requested / cell_skill_requested，从 data/cards/cards.json 读数值施加。
-# 目标非法（格子里有塔、塔已不存在等）时发 skill_request_rejected，P2 会把牌退回手牌。
+# 数值不用自己算，调 SkillEffects（P2 提供，数据来自 data/cards/cards.json）：
+var after := SkillEffects.apply_tower_skill(card_id, {
+    "attack": tower.attack,
+    "special_damage": tower.special_damage,   # 只有 C 塔有，没有就不要传
+    "attack_interval": tower.attack_interval,
+    "range_type": "ray",                      # A 塔传 ray，C 塔传 box
+    "ray_width": tower.ray_width,
+    "box_width": tower.box_width, "box_height": tower.box_height,
+})
+# after.attack / after.special_damage / after.attack_interval / after.ray_width …
+# 按 after.duration 到期还原；同类增益重复施加用 SkillEffects.combine_multiplier() 取更强
+
+# 地块技能：
+SkillEffects.slow_multiplier(&"skill_freeze")     # 0.5；slow_persists_after_leave() 为 true，别自己清减速
+SkillEffects.poison_profile(&"skill_poison")      # 每秒 100、持续 10 秒
+SkillEffects.area_offsets(&"skill_poison")        # 相对落点的 9 个格子偏移
+SkillEffects.repair_plan(&"skill_repair")         # 0.25 秒一跳、25 点、28 跳、共 700
+
+# 目标非法（格子里有塔、塔已不存在等）时发这条，P2 会把牌退回手牌。
 SignalBus.skill_request_rejected.emit(card_id, &"occupied")
 
 # ── P3：开局、商店、界面 ────────────────────────────────
@@ -243,11 +260,13 @@ P3 画面板时把空槽画成空位即可，不要补货。
 | `scripts/economy/settlement.gd` | 开一局、进入本关、基地掉点、代币结算、推进关卡、重复结算防护 | 通过 |
 | `scripts/economy/shop.gd` | 陈列、买卖、重置、两档升级、涨价；另给 P3 的 `get_panel_state()` 一次性面板数据 | 通过 |
 | `scripts/cards/card_db.gd` | 牌库、起始牌组、技能牌合法性预检与请求；另给 P3 的 `get_start_deck_options()` / `get_hand_view()` / `get_card_view()` | 通过 |
+| `scripts/cards/skill_effects.gd` | 六张技能牌的数值算法：`apply_tower_skill()`（A 100→130、C 特殊 350→455、间隔减半、范围 3 格宽 / 4×4）、`repair_plan()`（28 跳 700 点）、`slow_multiplier()`、`poison_profile()`、`area_offsets()`、`combine_multiplier()`（同类取更强不叠乘） | 通过 |
 | `data/economy.json`、`data/cards/cards.json`、`data/shop/shop.json`、`data/start_decks/index.json` | 全部占位数值 | 通过 |
 
-回归方式：工程里有 24 组冒烟断言（扣费、退款、结算、重复结算、商店买卖、重置、两档升级、出售、
-技能牌预检与退回、跳过牌组、推进关卡、牌组选项、商店面板状态、升级满级、手牌视图），
-在 `feat/p2-economy` 分支上跑 `godot --headless --path . res://.tmp/smoke.tscn` 全绿。该测试脚本不入库。
+回归方式：工程里有 26 组冒烟断言（扣费、退款、结算、重复结算、商店买卖、重置、两档升级、出售、
+技能牌预检与退回、跳过牌组、推进关卡、牌组选项、商店面板状态、升级满级、手牌视图、
+以及六张技能牌的数值算法），在 `feat/p2-economy` 分支上跑
+`godot --headless --path . res://.tmp/smoke.tscn` 全绿。该测试脚本不入库。
 
 ## 7. 待定项（拍板前不许自己填死）
 
