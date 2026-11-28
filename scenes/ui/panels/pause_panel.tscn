@@ -1,0 +1,151 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pause.gd" id="1_pause"]
+
+[node name="PausePanel" type="CanvasLayer"]
+process_mode = 3
+layer = 100
+script = ExtResource("1_pause")
+
+[node name="Overlay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.62)
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Overlay/Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(360, 0)
+
+[node name="Margin" type="MarginContainer" parent="Overlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 22
+
+[node name="Column" type="VBoxContainer" parent="Overlay/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Overlay/Center/Panel/Margin/Column"]
+layout_mode = 2
+mouse_filter = 2
+text = "已暂停"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 26
+
+[node name="Hint" type="Label" parent="Overlay/Center/Panel/Margin/Column"]
+layout_mode = 2
+mouse_filter = 2
+text = "按 ESC 继续"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+
+[node name="ResumeButton" type="Button" parent="Overlay/Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "继续"
+
+[node name="RestartButton" type="Button" parent="Overlay/Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "重新开始本局"
+
+[node name="MainMenuButton" type="Button" parent="Overlay/Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "返回主菜单"
+
+[node name="QuitGameButton" type="Button" parent="Overlay/Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "退出游戏"
+
+[node name="Confirm" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Confirm"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.72)
+
+[node name="Center" type="CenterContainer" parent="Confirm"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Confirm/Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(420, 0)
+
+[node name="Margin" type="MarginContainer" parent="Confirm/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 22
+
+[node name="Column" type="VBoxContainer" parent="Confirm/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ConfirmText" type="Label" parent="Confirm/Center/Panel/Margin/Column"]
+layout_mode = 2
+mouse_filter = 2
+text = "本局进度会丢失，确定吗？"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Confirm/Center/Panel/Margin/Column"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ConfirmNo" type="Button" parent="Confirm/Center/Panel/Margin/Column/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "取消"
+
+[node name="ConfirmYes" type="Button" parent="Confirm/Center/Panel/Margin/Column/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "确定"
