@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/panels/pre_battle_preview.gd" id="1_prev"]
+
+[node name="PreBattlePreview" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_prev")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.058, 0.07, 0.086, 1)
+
+[node name="Hint" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 900.0
+offset_bottom = 36.0
+mouse_filter = 2
+text = "按 1 正常数据 / 2 空数据 / 3 只给站号 / 4 连续 open 两次 / 5 关闭"
+theme_override_colors/font_color = Color(0.72, 0.76, 0.82, 1)

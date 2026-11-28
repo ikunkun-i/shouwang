@@ -1,0 +1,100 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/panels/pre_battle_panel.gd" id="1_pbp"]
+
+[node name="PreBattlePanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pbp")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.62)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(620, 0)
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="Column" type="VBoxContainer" parent="Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "战前情报"
+theme_override_font_sizes/font_size = 24
+
+[node name="StationLabel" type="Label" parent="Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "第 1 站"
+theme_override_colors/font_color = Color(0.72, 0.76, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+
+[node name="Sep1" type="HSeparator" parent="Center/Panel/Margin/Column"]
+layout_mode = 2
+
+[node name="BaseLabel" type="Label" parent="Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "基地点数 —"
+
+[node name="LayoutNote" type="Label" parent="Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "地图布局：本关加载后显示"
+theme_override_colors/font_color = Color(0.72, 0.76, 0.82, 1)
+
+[node name="Sep2" type="HSeparator" parent="Center/Panel/Margin/Column"]
+layout_mode = 2
+
+[node name="EnemyHeader" type="Label" parent="Center/Panel/Margin/Column"]
+layout_mode = 2
+mouse_filter = 2
+text = "敌方阵营"
+theme_override_font_sizes/font_size = 18
+
+[node name="EnemyList" type="VBoxContainer" parent="Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Spacer" type="Control" parent="Center/Panel/Margin/Column"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="DismissButton" type="Button" parent="Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "知道了"
