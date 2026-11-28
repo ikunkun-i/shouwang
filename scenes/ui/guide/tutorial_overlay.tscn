@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/guide/tutorial_overlay.gd" id="1_tut"]
+
+[node name="TutorialOverlay" type="CanvasLayer"]
+layer = 90
+script = ExtResource("1_tut")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.55)
+
+[node name="FocusRing" type="ReferenceRect" parent="."]
+unique_name_in_owner = true
+visible = false
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 120.0
+offset_bottom = 60.0
+mouse_filter = 2
+border_color = Color(0.98, 0.86, 0.55, 1)
+border_width = 3.0
+editor_only = false
+
+[node name="Bottom" type="MarginContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -260.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 28
+
+[node name="Center" type="CenterContainer" parent="Bottom"]
+layout_mode = 2
+
+[node name="Panel" type="PanelContainer" parent="Bottom/Center"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(700, 0)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="Bottom/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="Column" type="VBoxContainer" parent="Bottom/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StepLabel" type="Label" parent="Bottom/Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "第 1 / 5 步"
+theme_override_colors/font_color = Color(0.98, 0.86, 0.55, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="TextLabel" type="Label" parent="Bottom/Center/Panel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = ""
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Bottom/Center/Panel/Margin/Column"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PrevButton" type="Button" parent="Bottom/Center/Panel/Margin/Column/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 36)
+layout_mode = 2
+text = "上一步"
+
+[node name="Spacer" type="Control" parent="Bottom/Center/Panel/Margin/Column/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="SkipButton" type="Button" parent="Bottom/Center/Panel/Margin/Column/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 36)
+layout_mode = 2
+text = "跳过"
+
+[node name="NextButton" type="Button" parent="Bottom/Center/Panel/Margin/Column/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 36)
+layout_mode = 2
+text = "下一步"

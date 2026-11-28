@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/guide/tutorial_preview.gd" id="1_prev"]
+
+[node name="TutorialPreview" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_prev")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.058, 0.07, 0.086, 1)
+
+[node name="FakeHud" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 48.0
+
+[node name="FakeHudLabel" type="Label" parent="FakeHud"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+text = "费用 120    代币 37            第 1 波 / 共 3 波    基地 0"
+vertical_alignment = 1
+
+[node name="FakeCards" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 608.0
+offset_right = 500.0
+offset_bottom = 704.0
+
+[node name="FakeCardsLabel" type="Label" parent="FakeCards"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+text = "[A 直线输出 100]   [B 阻挡 75]   [C 范围输出 150]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hint" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 72.0
+offset_right = 1000.0
+offset_bottom = 96.0
+mouse_filter = 2
+text = "按 1 默认五步 / 2 自定义三步带高亮 / 3 非法数据 / 4 查 should_show"
+theme_override_colors/font_color = Color(0.72, 0.76, 0.82, 1)
