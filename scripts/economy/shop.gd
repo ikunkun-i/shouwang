@@ -186,6 +186,34 @@ func get_challenge_info() -> Dictionary:
 	return JsonConfig.get_dict(_config, "challenge")
 
 
+## 火力强化（两档全局升级）对**全部塔**攻击力的倍率。未购买返回 1.0。
+## P1 算塔的实际攻击力时乘这个值：actual_attack = base_attack × Shop.get_attack_multiplier()。
+## 注意这是全局增益，不是逐塔升级。
+func get_attack_multiplier() -> float:
+	return _upgrade_effect_value(&"damage", "tower_attack_multiplier")
+
+
+## 产能强化对基地产费的倍率。Fee 内部已经在用同一份数据，这里给界面显示用。
+func get_income_multiplier() -> float:
+	return _upgrade_effect_value(&"income", "passive_income_multiplier")
+
+
+func _upgrade_effect_value(upgrade_id: StringName, effect_type: String) -> float:
+	var tier := GameState.get_upgrade_tier(upgrade_id)
+	if tier <= 0:
+		return 1.0
+	var upgrade := _find_upgrade(upgrade_id)
+	if upgrade.is_empty():
+		return 1.0
+	var tier_data := _find_tier(upgrade, tier)
+	if tier_data.is_empty():
+		return 1.0
+	var effect: Dictionary = tier_data.get("effect", {})
+	if String(effect.get("type", "")) != effect_type:
+		return 1.0
+	return float(effect.get("value", 1.0))
+
+
 # ============================================================
 # 给界面的展示数据（P3 直接渲染，不要自己解析 data/）
 # ============================================================

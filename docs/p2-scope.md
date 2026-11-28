@@ -127,6 +127,10 @@ if not Fee.try_spend(tower_cost, &"build"):
 var refund := Fee.refund_tower(&"A")
 SignalBus.tower_sold.emit(tower_id, refund)
 
+# ── P1：全局升级加成 ────────────────────────────────────
+# 火力强化是全局增益，乘在塔的实际攻击力上；未购买返回 1.0（第二档 1.3）。
+var actual_attack := base_attack * Shop.get_attack_multiplier()
+
 # ── P1：击杀 / 基地 ─────────────────────────────────────
 # 击杀发 enemy_killed(enemy_id, reward)；reward 传 0 时 P2 按 economy.json 兜底 +50。
 # 基地被撞发 base_lost(base_id)，P2 扣 1 点基地点数（占位规则）。
