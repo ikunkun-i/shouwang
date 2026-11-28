@@ -43,7 +43,6 @@
 
 > 冻结版本：`v1 / 2026-11-28`。字段只增不改，改名等于全队返工。
 > 写入者只有 P2 的四个脚本：`fee_system.gd`、`settlement.gd`、`shop.gd`、`card_db.gd`。P1 / P3 只读字段，或调用 P2 提供的公开方法。
-
 | 字段 | 类型 | 含义 | 初始值 | 读方 |
 | --- | --- | --- | --- | --- |
 | `fee` | int | 战斗内可用费用 | 0 | P1 建塔、P3 HUD |
@@ -58,6 +57,7 @@
 | `enemies_killed` | int | 本关累计击杀数（结算与日志用） | 0 | P3 结算面板 |
 | `towers_built` | int | 本关累计建塔数 | 0 | P3 结算面板 |
 | `stations_cleared` | int | 本轮已通过的小关数 | 0 | P3 结算面板 |
+| `last_station_reward` | int | 最近一次结算到账的代币数（失败为 0），供结算面板显示「本关获得 X 代币」 | 0 | P3 结算面板 |
 
 **写入规则**：任何字段变化都要在同一帧内通过 `SignalBus` 广播对应信号；界面只监听，不自行推算。
 
@@ -237,7 +237,7 @@ P3 画面板时把空槽画成空位即可，不要补货。
 | 文件 | 内容 | 验证 |
 | --- | --- | --- |
 | `scripts/core/json_config.gd` | `data/` 下 JSON 的统一读取器（带缓存与类型转换） | 通过 |
-| `scripts/core/game_state.gd` | 13 个字段 + 写入方法，写后广播 | 通过 |
+| `scripts/core/game_state.gd` | 14 个字段 + 写入方法，写后广播 | 通过 |
 | `scripts/core/signal_bus.gd` | 27 条信号，冻结 v1 | 通过 |
 | `scripts/economy/fee_system.gd` | 扣费、击杀奖励、拆塔退款、基地定时产费、产能升级加成 | 通过 |
 | `scripts/economy/settlement.gd` | 开一局、进入本关、基地掉点、代币结算、推进关卡、重复结算防护 | 通过 |
@@ -270,7 +270,7 @@ P3 画面板时把空槽画成空位即可，不要补货。
 
 | 里程碑 | 日期 | P2 交付 | 验收 | 状态 |
 | --- | --- | --- | --- | --- |
-| D1 | 11-28 | 契约冻结：`GameState` 13 字段、`SignalBus` 27 条信号、本文件、`data/` 四份配置、六个脚本 | 冒烟 20 组全绿；P1、P3 能按表编程 | **已完成**，待 PR 合入 `main` |
+| D1 | 11-28 | 契约冻结：`GameState` 14 字段、`SignalBus` 27 条信号、本文件、`data/` 四份配置、六个脚本 | 冒烟 24 组全绿；P1、P3 能按表编程 | **已完成**，待 PR 合入 `main` |
 | D2 | 11-29 | `fee_system` 接上 P1 的真实建造 / 拆塔链路，复核占位数值 | 建塔扣费、余额不足被拒、拆塔退回 50% | 代码就绪，等 P1 调用 |
 | D3 | 11-30 | 商店业务逻辑接上 P3 的商店场景 | 塔牌 / 技能牌能买，代币正确扣减 | 代码就绪，等 P3 场景 |
 | D4 | 12-01 | 与全队对齐「能打一关」 | 选牌组进关卡、建塔、击杀得费、基地掉点、波次推进、胜利结算，全程无报错 | 待联调 |
@@ -279,8 +279,60 @@ P3 画面板时把空槽画成空位即可，不要补货。
 | D7 | 12-04 | 三套起始牌组定稿、数值调整 | 三套牌组各能开局 | 待调 |
 | D8 | 12-05 | 功能冻结前修缺陷，配合 P3 出包 | 连续三关不崩 | 待 |
 
-## 9. 每次提交前的自查四问
+## 9. 给 P3 的答复（对《P3 任务全景流程图》第三节的 5 条）
 
+| # | P3 的需求 | 状态 | 你该怎么做 |
+| --- | --- | --- | --- |
+| 1 | `data/start_decks/` 的字段结构、跳过时默认给哪一套 | **已完成** | 别直接读 JSON，用 `Cards.get_start_deck_options()`。返回数组，每项 `{id, name, desc, cards, card_names, is_skip}`，**最后一项固定是「跳过」**。跳过的口径：只解锁 A 塔、不带任何牌（策划案原话「跳过时只给 1 种基础炮台」） |
+| 2 | `deck_id` 的装配入口函数（`Flow.start_run` 里现在留的是 TODO） | **已完成** | 调 `Settlement.start_run(deck_id)`。它一次做完：清零状态 → 装配牌组 → 解锁塔型 → 发 `run_started`。跳过传 `&""`。<br>⚠️ 把 `Flow.start_run()` 里原来的 `GameState.reset_run()` **删掉**，否则会把刚装好的牌组再清空一次 |
+| 3 | `last_station_reward`（结算面板要显示本关赚了多少代币，信号里没有） | **本次新增** | 读 `GameState.last_station_reward`（失败为 0）。也可以监听 `station_settled(station_index, tokens_gained)`，两者同值 |
+| 4 | `station_index` 由谁 +1 | **归 P2，P3 不要碰** | `Settlement` 监听 `shop_closed` 后自动 +1；也可显式调 `Settlement.advance_to_next_station()`（返回 `false` 表示已经是最后一关）。下一关的状态由战斗场景 `_ready` 调 `Settlement.begin_current_station()` 就位 |
+| 5 | 商店逻辑与外观的切分点：`shop.gd` 有哪些公开函数 | **已完成** | 见下方 9.1 |
+
+### 9.1 商店：P3 可调用的全部公开函数
+
+```gdscript
+# 开关（商店场景 _ready 调一次 open，关闭按钮调 close）
+Shop.open_shop(GameState.station_index)
+Shop.close_shop()
+
+# 一次拿全部面板数据（推荐：只调这一个）
+var state := Shop.get_panel_state()
+#   state.offers      陈列，每项 {kind, card_id, name, desc, price, sold, affordable, card}
+#   state.upgrades    两档升级，每项 {id, name, current_tier, max_tier, next_tier, next_price, next_desc, maxed, affordable}
+#   state.sellable    可卖的技能牌，每项 {card_id, name, refund, card}
+#   state.reroll_cost / state.can_reroll
+#   state.tokens / state.station_index / state.challenge
+
+# 也可以分开取
+Shop.get_offers()  Shop.get_offer_view_models()  Shop.get_upgrade_view_models()
+Shop.get_sellable_cards()  Shop.get_reroll_cost()  Shop.get_price(card_id)
+
+# 动作（全部返回 bool，失败会发 purchase_failed 说明原因）
+Shop.buy_tower_card(card_id)   Shop.buy_skill_card(card_id)
+Shop.buy_upgrade(upgrade_id)   Shop.reroll()   Shop.sell_card(card_id)
+```
+
+**边界**：价格、是否售罄、是否买得起、是否满级，全部由 `get_panel_state()` 的 `price / sold / affordable / maxed` 给出，**P3 不要自己算**（涨价系数在 P2 的数据里，界面算一定算错）。
+
+### 9.2 HUD 塔牌栏
+
+- 手牌数据：`Cards.get_hand_view()`，每项含 `id / name / kind / desc / price / target / requires_attack_min / owned`。
+- 「哪张牌此刻可打出」**不需要 HUD 预判**：牌一直留在手里，玩家拖到非法目标时，P2 或 P1 会发 `skill_request_rejected`，P2 自动把牌退回并广播 `deck_changed`。
+- HUD 想给提示，就按 `target`（`tower` / `cell`）和 `requires_attack_min`（例如加攻击力要求攻击力 ≥ 1，对 B 阻挡塔无效）显示一行小字即可。
+
+### 9.3 结算面板读什么
+
+```gdscript
+GameState.last_station_reward   # 本关获得代币
+GameState.base_points           # 剩余基地点数
+GameState.base_total_points     # 本关初始基地点数（画比例用）
+GameState.enemies_killed        # 本关击杀
+GameState.towers_built          # 本关建塔
+GameState.tokens                # 当前总代币
+```
+
+## 10. 每次提交前的自查四问
 1. 写状态后有没有**立刻发信号**？
 2. 有没有把数值**写死在代码里**（应该在 `data/`）？
 3. 有没有**跨轨**（用代币补费用、用费用买牌）？

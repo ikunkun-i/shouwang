@@ -53,6 +53,9 @@ var enemies_killed: int = 0
 var towers_built: int = 0
 ## 本轮已通过的小关数。
 var stations_cleared: int = 0
+## 最近一次结算到账的代币数（P3 的结算面板直接读它显示「本关获得 X 代币」）。
+## 失败时是 0。它只是显示用的快照，真正的余额在 tokens 里。
+var last_station_reward: int = 0
 
 
 # ============================================================
@@ -72,6 +75,7 @@ func reset_run() -> void:
 	enemies_killed = 0
 	towers_built = 0
 	stations_cleared = 0
+	last_station_reward = 0
 
 
 ## 进入某一小关：设置关号与基地点数，并广播「本关已就绪」。

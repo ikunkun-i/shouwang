@@ -81,6 +81,7 @@ func _on_station_cleared(station_index: int) -> void:
 	_settled_index = station_index
 	GameState.stations_cleared += 1
 	var gained := _compute_tokens(true)
+	GameState.last_station_reward = gained
 	_award_tokens(gained)
 	SignalBus.station_settled.emit(station_index, gained)
 
@@ -92,6 +93,7 @@ func _on_station_failed(station_index: int) -> void:
 	if _settled_index == station_index:
 		return
 	_settled_index = station_index
+	GameState.last_station_reward = 0
 	SignalBus.station_settled.emit(station_index, 0)
 
 

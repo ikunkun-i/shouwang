@@ -12,7 +12,7 @@
 | 1 | 表2 P1「四类塔」 | 单体炮台、范围放电、减速场、维修塔 | **三种塔**：A 直线输出、B 阻挡、C 范围输出。数值见 `data/towers/towers.json` | P1 全部塔逻辑、P3 塔牌栏 |
 | 2 | 表2 P1 塔模块 | 减速场、维修塔各是一种塔 | **作废**：减速改为地块技能「冰冻」，维修改为技能牌「修理」。塔只有三种 | P1 少两类塔；P2 多两张技能牌 |
 | 3 | 表2 P1「敌船」 | 敌船：生命、速度、**护甲**、抵达基地 | **三种敌人**：A 普通、B 远程、C 隐身。**没有护甲**；C 不可被正常索敌、不可被阻挡 | P1 敌人模型、P2 数值 |
-| 4 | 表5 状态单例 | 5 个字段：fee、tokens、unlocked_towers、station_index、base_points | **13 个字段**，见 `docs/p2-scope.md` 第 2 节（新增 total_stations、base_total_points、deck、upgrades、3 个统计字段） | 全员 |
+| 4 | 表5 状态单例 | 5 个字段：fee、tokens、unlocked_towers、station_index、base_points | **14 个字段**，见 `docs/p2-scope.md` 第 2 节（新增 total_stations、base_total_points、deck、upgrades、3 个统计、last_station_reward） | 全员 |
 | 5 | 表6 事件总线 | 10 条信号 | **27 条信号**，见 `docs/p2-scope.md` 第 3 节 | 全员 |
 | 6 | 表7 里程碑 D5 | 「购得一张塔牌、第二关使用新塔型」 | 仍成立，但**塔组开局就解锁了 A/B/C，商店塔牌槽会是空的**。D5 验收要改用「技能组」或「跳过」开局，才买得到塔牌 | P2、P3 验收脚本 |
 | 7 | 表8 降级方案 | 「保留单体炮台与范围放电，减速与维修转入后续版本」 | 按三种塔重写：**保留 A 与 C，B 降级为不带攻击的纯血量墙**；技能牌先砍「加攻击范围」与「毒气」 | P1、P2 |
